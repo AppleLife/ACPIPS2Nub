@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleName</key>
+	<string>${PRODUCT_NAME}</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>${MODULE_NAME}</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>${MODULE_VERSION}</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>ACPI PS/2 Nub</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>${MODULE_NAME}</string>
+			<key>IOClass</key>
+			<string>AppleACPIPS2Nub</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>PNP0303</string>
+				<string>PNP030B</string>
+			</array>
+			<key>IOProbeScore</key>
+			<integer>1000</integer>
+			<key>IOProviderClass</key>
+			<string>IOACPIPlatformDevice</string>
+			<key>MouseNameMatch</key>
+			<array>
+				<string>PNP0F03</string>
+				<string>PNP0F0B</string>
+				<string>PNP0F13</string>
+				<string>PNP0F0E</string>
+			</array>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+        <!--    We import AppleACPIPlatform for gAppleACPIPlatformExpert which we
+                could just as well get by asking the IORegistry for the PE.  However,
+                we only want to load for newer (OS X 10.5) ACPI PE anyway so this
+                serves a double purpose to ensure this.
+        -->
+		<key>com.apple.driver.AppleACPIPlatform</key>
+		<string>1.1.0</string>
+        <!--    Import IOACPIFamily for gIOACPIPlane -->
+        <key>com.apple.iokit.IOACPIFamily</key>
+		<string>1.0.0d1</string>
+		<key>com.apple.kernel.libkern</key>
+		<string>1.1</string>
+
+<!--    We can't use KPI for some reason.. perhaps because we import AppleACPIPlatform
+        < ! - -    Import unsupported KPIs for IOPlatformDevice - - >
+		<key>com.apple.kpi.unsupported</key>
+		<string>9.0</string>
+		<key>com.apple.kpi.iokit</key>
+		<string>9.0</string>
+		<key>com.apple.kpi.libkern</key>
+		<string>9.0</string>
+-->
+	</dict>
+
+    <!--    FIXME: Console? Safe?
+            Console: documented suitable for keyboard drivers
+            Safe: documented suitable for mouse drivers
+            Root: Supposed to only be used for kexts that are required to mount the root device.
+            But.. we're a nub that provides the service that both of those attach to
+            The thing is, we need to work from single user mode as well, so Root is probably best.
+    -->
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
